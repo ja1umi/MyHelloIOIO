@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="15dip">
+    <TextView android:layout_height="wrap_content" android:layout_marginBottom="25dip" android:text="@string/msg" android:layout_gravity="center" android:layout_width="wrap_content" android:textSize="24.5sp"></TextView>
+    <ToggleButton android:layout_height="wrap_content" android:text="ToggleButton" android:layout_gravity="center" android:layout_width="216dp" android:id="@+id/toggleButton1"></ToggleButton>
+<EditText android:layout_height="wrap_content" android:id="@+id/editText1" android:layout_width="match_parent">
+    <requestFocus></requestFocus>
+</EditText>
+<Button android:layout_height="wrap_content" android:id="@+id/button1" android:text="Send" android:layout_gravity="left" android:layout_width="139dp"></Button>
+<Button android:layout_height="wrap_content" android:id="@+id/button2" android:layout_width="wrap_content" android:text="Exit" android:layout_gravity="right"></Button>
+</LinearLayout>
