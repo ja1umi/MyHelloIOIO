@@ -1,13 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
     <resources>
         <string-array name="speed_entries">
-            <item>Fast</item>
-            <item>Medium</item>
             <item>Slow</item>
+            <item>Medium</item>
+            <item>Fast</item>
         </string-array>
-        <string-array name="speed_values">
-            <item>fast</item>
-            <item>medium</item>
-            <item>slow</item>
-        </string-array>
+        <integer-array name="speed_values">
+            <item>1</item>
+            <item>2</item>
+            <item>3</item>
+        </integer-array>
+        <integer-array name="displacement_values">
+        	<item>2</item>
+        	<item>4</item>
+        	<item>8</item>
+        </integer-array>
+        <integer-array name="tune_values">
+        	<item>1500</item>
+        	<item>1450</item>
+        	<item>1400</item>
+        </integer-array>
     </resources>

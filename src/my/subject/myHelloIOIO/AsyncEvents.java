@@ -24,14 +24,14 @@ import android.app.ProgressDialog;
 public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnCancelListener {
 	private static final boolean SERDEBUG = false;
 	private static final String TAG = "AsyncEvents";
-	private static final int OPT_SPD_MEDIUM_VAL = 2;
+	private static final int OPT_DEFAULT_ENTRY = 1;
 	
 	private DigitalOutput led;
 	private OutputStream out;
 	private OutputStream scon;
 	private ToggleButton tBtn;
 	private Button btn;
-	private int sendSpeed;
+	private int sendSpeed, disp, tune;
 	private boolean isInCalibrationMode;
 	private MIDIHellschreiber hell;
 	private static boolean isIdle;
@@ -44,7 +44,7 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 		act = activity;
 		out = output;
 		setSendSpeed(spd);
-		setInCalibrationMode(flag);
+		enableCalibrationMode(flag);
 		hell = new MIDIHellschreiber();
 		hell.gsReset();
 		setIdle(true);
@@ -55,8 +55,10 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 	public AsyncEvents(Activity activity, OutputStream output) {
 		act = activity;
 		out = output;
-		setSendSpeed(OPT_SPD_MEDIUM_VAL);
-		setInCalibrationMode(false);
+		setSendSpeed(act.getResources().getIntArray(R.array.speed_values)[OPT_DEFAULT_ENTRY]);
+		setDisplacement(act.getResources().getIntArray(R.array.displacement_values)[OPT_DEFAULT_ENTRY]);
+		setTune(act.getResources().getIntArray(R.array.tune_values)[OPT_DEFAULT_ENTRY]);
+		enableCalibrationMode(false);
 		hell = new MIDIHellschreiber();
 		hell.gsReset();
 		setIdle(true);
@@ -65,12 +67,14 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 		led = null;
 	}
 
-	public AsyncEvents(Activity activity, OutputStream output, OutputStream console, DigitalOutput dout) {
+	public AsyncEvents(Activity activity, OutputStream output, OutputStream console, DigitalOutput dout, int pos) {
 		act = activity;
 		out = output;
 		scon = console;
-		setSendSpeed(OPT_SPD_MEDIUM_VAL);
-		setInCalibrationMode(false);
+		setSendSpeed(act.getResources().getIntArray(R.array.speed_values)[pos]);
+		setDisplacement(act.getResources().getIntArray(R.array.displacement_values)[pos]);
+		setTune(act.getResources().getIntArray(R.array.tune_values)[pos]);
+		enableCalibrationMode(false);
 		hell = new MIDIHellschreiber();
 		hell.gsReset();
 		setIdle(true);
@@ -79,7 +83,7 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 		led = dout;
 	}
 
-	public void setInCalibrationMode(boolean status) {
+	public void enableCalibrationMode(boolean status) {
 		this.isInCalibrationMode = status;
 	}
 
@@ -104,10 +108,27 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 		return sendSpeed;
 	}
 	
+	public void setDisplacement(int dp) {
+		this.disp = dp;
+	}
+	
+	public int getDisplacement() {
+		return disp;
+	}
+	
+	public void setTune(int val) {
+		this.tune = val;
+	}
+	
+	public int getTune() {
+		return tune;
+	}
+	
 	private void serCon(String str) {
 		if ( (scon != null) && (str != null) && (str.length() > 0) )
 			try {
-				scon.write(str.getBytes("UTF-8"));
+//				scon.write(str.getBytes("UTF-8"));
+				scon.write(str.getBytes());
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				Log.d(TAG, "IOException in serCon()");
