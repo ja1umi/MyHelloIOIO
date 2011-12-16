@@ -11,13 +11,15 @@ import ioio.lib.api.Uart;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.AbstractIOIOActivity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
+//import android.content.res.TypedArray;
 import android.os.Bundle;
 //import android.widget.CompoundButton;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
+//import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ToggleButton;
@@ -44,13 +46,14 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 //	private static final int OPT_SPD_SLOW_VAL = 3;
 	private static final int OPT_DEFAULT_ENTRY = 1;
 	
-	private boolean ioioInitialized;
+//	private boolean ioioInitialized;
 	private String hellMessage;
 //	private String sendSpeedTag;
-	private boolean smsGWMode;
+	private boolean smsGWMode, smallFontMode, doubleWidthMode;
+//	private boolean[] defaultSettings;
 	private int itemAtPos = OPT_DEFAULT_ENTRY;
 	private ToggleButton toggleButton;
-	private Button sendButton, exitButton, aboutButton;
+	private Button sendButton, exitButton, aboutButton, settingButton;
 	private AsyncEvents async;
 	private OutputStream out, scon;
 	private DigitalOutput led;
@@ -58,14 +61,26 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 //	private List<String> msgList = Collections.synchronizedList( new ArrayList<String>() );
 	private EditText editText;
 	private Spinner spinner;
-	private CheckBox checkBox;
+//	private CheckBox checkBox;
     
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setIoioInitialized(true);		// set it to 'true' during development _without_ IOIO board
-        enableSmsGWMode(false);
+//        setIoioInitialized(true);		// set it to 'true' during development _without_ IOIO board
+//        enableSmsGWMode(false);
+//        enableSmallFontMode(false);
+//        enableDoubleWidthMode(false);
+//		TypedArray tArray = getResources().obtainTypedArray(R.array.setting_values);
+//		defaultSettings = new boolean[tArray.length()];
+//		for (int i =0; i < tArray.length(); i++) {
+//			defaultSettings[i] = tArray.getBoolean(i, false);
+//		}
+//		tArray.recycle();
+		enableSmsGWMode(getResources().getBoolean(R.bool.SmsGWMode));
+		enableSmallFontMode(getResources().getBoolean(R.bool.SmallFontMode));
+		enableDoubleWidthMode(getResources().getBoolean(R.bool.DoubleWidthMode));
+
         setContentView(R.layout.main);
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
         toggleButton.setOnClickListener(this);
@@ -75,34 +90,54 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
         exitButton.setOnClickListener(this);
         aboutButton = (Button) findViewById(R.id.button3);
         aboutButton.setOnClickListener(this);
+        settingButton = (Button) findViewById(R.id.button4);
+        settingButton.setOnClickListener(this);
         editText = (EditText) findViewById(R.id.editText1);
         editText.setMaxLines(1);
         editText.setHint(getString(R.string.et1_hint));
-        editText.setText("TEST");
+        editText.setText(R.string.editText_defaultText);
         spinner = (Spinner) findViewById(R.id.spinner1);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.speed_entries,android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setSelection(OPT_DEFAULT_ENTRY);
         spinner.setOnItemSelectedListener(this);
-        checkBox = (CheckBox) findViewById(R.id.checkBox1);
-        checkBox.setOnClickListener(this);
+//       checkBox = (CheckBox) findViewById(R.id.checkBox1);
+//       checkBox.setOnClickListener(this);
+
+//        enableUi(false);			// Remember to enable this line after debugging!
     }
 
-	public void setIoioInitialized(boolean stat) {
-		this.ioioInitialized = stat;
-	}
-
-	public boolean isIoioInitialized() {
-		return ioioInitialized;
-	}
-	
+//	public void setIoioInitialized(boolean stat) {
+//		this.ioioInitialized = stat;
+//	}
+//
+//	public boolean isIoioInitialized() {
+//		return ioioInitialized;
+//	}
+//	
 	public void enableSmsGWMode(boolean stat) {
 		this.smsGWMode = stat;
 	}
 	
 	public boolean isSmsGWEnabled() {
 		return smsGWMode;
+	}
+	
+	public void enableSmallFontMode(boolean stat) {
+		this.smallFontMode = stat;
+	}
+	
+	public boolean isSmallFontEnabled() {
+		return smallFontMode;
+	}
+	
+	public void enableDoubleWidthMode(boolean stat) {
+		this.doubleWidthMode = stat;
+	}
+	
+	public boolean isDoubleWidthModeEnabled() {
+		return doubleWidthMode;
 	}
 	
 	public void setItemAtPos(int val) {
@@ -114,7 +149,7 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 	}
 
 	public void onClick(View v) {
-		if ( isIoioInitialized() ) {
+//		if ( isIoioInitialized() ) {
 			switch(v.getId()) {
 				case R.id.toggleButton1:
 					Log.d(TAG, "ToggleButton was clicked");
@@ -131,6 +166,7 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 					Log.d(TAG, "Button (SEND) was clicked");
 					async = new AsyncEvents(MyHelloIOIOActivity.this, out, scon, led, getItemAtPos());
 					hellMessage = editText.getText().toString();
+					enableUi(false);
 					if ( AsyncEvents.isIdle() ) {
 						Log.d(TAG, "AsyncEvents WAS in idle status.");
 						if ( isSmsGWEnabled() && SMSReceiver.isSMSReceived() ) {
@@ -142,20 +178,24 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 						Log.d(TAG, "hell msg in onClick() = " + hellMessage);
 						async.enableCalibrationMode(false);
 //						async.setSendSpeed(getResources().getIntArray(R.array.speed_values)[getItemAtPos()]);
-						Log.d(TAG, "SendSpeed = " + Integer.toString(async.getSendSpeed()));
+//						Log.d(TAG, "SendSpeed = " + Integer.toString(async.getSendSpeed()));
 						if ( hellMessage.length() > 0 )
 							async.execute(hellMessage);
 						hellMessage = "";
 					}
+					enableUi(true);
 					break;
-				case R.id.checkBox1:
-					if (checkBox.isChecked()) {
-						enableSmsGWMode(true);
-						Log.d(TAG, "SMSGW enabled.");
-					} else {
-						enableSmsGWMode(false);
-						Log.d(TAG, "SMSGW disabled.");
-					}
+//				case R.id.checkBox1:
+//					if (checkBox.isChecked()) {
+//						enableSmsGWMode(true);
+//						Log.d(TAG, "SMSGW enabled.");
+//					} else {
+//						enableSmsGWMode(false);
+//						Log.d(TAG, "SMSGW disabled.");
+//					}
+//					break;
+				case R.id.button4:
+					showSettingDialog();
 					break;
 				case R.id.button3:
 					AlertDialog.Builder dlg = new AlertDialog.Builder(this);
@@ -172,8 +212,79 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 					finish();
 					break;
 			} // end of switch
-		} // end if if
+//		} // end of if ( isIoioInitialized() )
 	} // end of onClick()
+	
+	private void showSettingDialog() {
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+		final boolean[] settings = new boolean[3];
+		settings[0] = isSmsGWEnabled();
+		settings[1] = isSmallFontEnabled();
+		settings[2] = isDoubleWidthModeEnabled();		
+		
+		alertDialogBuilder.setTitle(R.string.setting_title);
+		alertDialogBuilder.setMultiChoiceItems(R.array.setting_items, settings,
+				new DialogInterface.OnMultiChoiceClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+						switch (which) {
+							case 0:
+								if (isChecked) {
+									enableSmsGWMode(true);
+									Log.d(TAG, "SMSGW enabled.");
+								} else {
+									enableSmsGWMode(false);
+									Log.d(TAG, "SMSGW disabled.");									
+								}
+								break;
+							case 1:
+								if (isChecked) {
+									enableSmallFontMode(true);
+									Log.d(TAG, "Use smaller font (font# = 0).");
+								} else {
+									enableSmallFontMode(false);
+									Log.d(TAG, "Use default(7x5) font (font# = 1).");									
+								}
+								break;
+							case 2:
+								if (isChecked) {
+									enableDoubleWidthMode(true);
+									Log.d(TAG, "Double-Width mode is now enabled.");
+								} else {
+									enableDoubleWidthMode(false);
+									Log.d(TAG, "Double-Width mode is now disabled.");									
+								}
+								break;
+							default:
+								break;
+						}
+					}			
+				} // end of OnMultiChoiceClickListener()
+		); // end of setMultiChoiceItems()
+		
+        alertDialogBuilder.setPositiveButton(R.string.setting_ok,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    	Log.d(TAG, "Settings wre overwritten.");
+                    }
+                }
+        ); // end of setPositiveButton()
+        
+        alertDialogBuilder.setNegativeButton(R.string.setting_cancel,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                    	enableSmsGWMode(settings[0]);
+                    	enableSmallFontMode(settings[1]);
+                    	enableDoubleWidthMode(settings[2]);
+                    	Log.d(TAG, "Settings were reverted to previous values.");
+                    }
+                }
+        ); // end of setNegativeButton()
+        
+        alertDialogBuilder.create().show();
+	} // end of showSettingDialog
 	
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -234,7 +345,8 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
     		led = ioio_.openDigitalOutput(IOIO.LED_PIN, true);
     		serCon("DigitalOutput module was successfully configured.");
     		serCon("IOIO board initialization has completed.");
-    		setIoioInitialized(true);
+    		enableUi(true);
+ //   		setIoioInitialized(true);
     	} // end of setup()
     	
     	@Override
@@ -252,7 +364,7 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
     				async = new AsyncEvents(MyHelloIOIOActivity.this, out, scon, led, getItemAtPos());
 //    				async.setSendSpeed(getResources().getIntArray(R.array.speed_values)[getItemAtPos()]);
 //    				Log.d(TAG, "SendSpeed = " + Integer.toString(async.getSendSpeed()));
-    				serCon(TAG + ": SendSpeed = " + Integer.toString(async.getSendSpeed()));
+//   				serCon(TAG + ": SendSpeed = " + Integer.toString(async.getSendSpeed()));
 //    				Log.d(TAG, "hell msg = " + hellMessage);
     				serCon(TAG + ": hell msg = " + hellMessage);
     				if ( hellMessage.length() > 0 )
@@ -269,7 +381,8 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
     } // end of inner-class IOIOThread definition
 
     private void serCon(String str) {
-		if ( isIoioInitialized() && (scon != null) && (str != null) && (str.length() > 0) )
+//		if ( isIoioInitialized() && (scon != null) && (str != null) && (str.length() > 0) )
+		if ( (scon != null) && (str != null) && (str.length() > 0) )
 			try {
 //				scon.write(str.getBytes("UTF-8"));
 				scon.write(str.getBytes());
@@ -297,5 +410,16 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 		// TODO Auto-generated method stub
 //		sendSpeedTag = "medium";
 	}
+	
+	private void enableUi(final boolean stat) {
+		runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				sendButton.setEnabled(stat);
+				toggleButton.setEnabled(stat);
+			}
+		});
+	}
+
         
 }

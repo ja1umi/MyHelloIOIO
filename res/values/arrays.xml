@@ -20,4 +20,9 @@
         	<item>1450</item>
         	<item>1400</item>
         </integer-array>
+        <string-array name="setting_items">
+            <item >Enable SMS GW</item>
+            <item >Use smaller font</item>
+            <item >Use double-width character</item>
+        </string-array>
     </resources>

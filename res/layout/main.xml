@@ -5,13 +5,21 @@
     android:layout_height="fill_parent"
     android:padding="10dip">
     <TextView android:layout_width="wrap_content" android:textSize="20sp" android:layout_marginBottom="10dip" android:layout_gravity="center" android:text="@string/msg" android:layout_height="wrap_content"></TextView>
-    <ToggleButton android:text="ToggleButton" android:layout_width="match_parent" android:layout_gravity="center" android:id="@+id/toggleButton1" android:layout_height="wrap_content"></ToggleButton>
+    <ToggleButton android:text="@string/toggleButton_testTone" android:layout_width="match_parent" android:layout_gravity="center" android:id="@+id/toggleButton1" android:layout_height="wrap_content"></ToggleButton>
 <Spinner android:layout_width="match_parent" android:id="@+id/spinner1" android:layout_height="wrap_content"> </Spinner>
 <EditText android:layout_height="wrap_content" android:id="@+id/editText1" android:layout_width="match_parent">
     <requestFocus></requestFocus>
 </EditText>
-<Button android:id="@+id/button1" android:text="Send" android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_gravity="center_horizontal"></Button>
-<Button android:id="@+id/button3" android:text="About" android:layout_height="wrap_content" android:layout_width="match_parent"></Button>
-<Button android:id="@+id/button2" android:layout_width="match_parent" android:text="Exit" android:layout_gravity="center_horizontal" android:layout_height="wrap_content"></Button>
-<CheckBox android:text="GW" android:id="@+id/checkBox1" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox>
+<Button android:id="@+id/button1" android:text="@string/button_send" android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_gravity="center_horizontal"></Button>
+<Button android:id="@+id/button3" android:text="@string/button_about" android:layout_height="wrap_content" android:layout_width="match_parent"></Button>
+
+<Button
+    android:id="@+id/button4"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/button_settings" />
+
+<Button android:id="@+id/button2" android:layout_width="match_parent" android:text="@string/button_quit" android:layout_gravity="center_horizontal" android:layout_height="wrap_content"></Button>
+
+<!--  <CheckBox android:text="GW" android:id="@+id/checkBox1" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox> -->
 </LinearLayout>

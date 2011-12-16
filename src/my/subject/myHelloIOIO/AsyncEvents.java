@@ -8,7 +8,7 @@ import java.io.IOException;
 import ioio.lib.api.DigitalOutput;
 import ioio.lib.api.exception.ConnectionLostException;
 import android.os.AsyncTask;
-import android.widget.Button;
+//import android.widget.Button;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 //import android.content.Context;
@@ -24,74 +24,82 @@ import android.app.ProgressDialog;
 public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnCancelListener {
 	private static final boolean SERDEBUG = false;
 	private static final String TAG = "AsyncEvents";
-	private static final int OPT_DEFAULT_ENTRY = 1;
+//	private static final int OPT_DEFAULT_ENTRY = 1;
+	public final int FONT5x5 = 0;
+	public final int FONT7x5 = 1;
 	
 	private DigitalOutput led;
 	private OutputStream out;
 	private OutputStream scon;
 	private ToggleButton tBtn;
-	private Button btn;
-	private int sendSpeed, disp, tune;
-	private boolean isInCalibrationMode;
+//	private Button btn;
+	private int fontNumber, sendSpeed, disp, tune;
+	private boolean isInCalibrationMode, isDoubleWidth;
 	private MIDIHellschreiber hell;
 	private static boolean isIdle;
 
 //	Context context;
-	Activity act = null;
-	ProgressDialog dialog = null;
+	private Activity act = null;
+	private ProgressDialog dialog = null;
 	
-	public AsyncEvents(Activity activity, OutputStream output, int spd, boolean flag) {
-		act = activity;
-		out = output;
-		setSendSpeed(spd);
-		enableCalibrationMode(flag);
-		hell = new MIDIHellschreiber();
-		hell.gsReset();
-		setIdle(true);
-		tBtn = (ToggleButton)act.findViewById(R.id.toggleButton1);
-		btn = (Button)act.findViewById(R.id.button1);
-	}
+//	public AsyncEvents(Activity activity, OutputStream output, int spd, boolean flag) {
+//		act = activity;
+//		out = output;
+//		setSendSpeed(spd);
+//		enableCalibrationMode(flag);
+//		hell = new MIDIHellschreiber();
+//		hell.gsReset();
+//		setIdle(true);
+//		tBtn = (ToggleButton)act.findViewById(R.id.toggleButton1);
+////		btn = (Button)act.findViewById(R.id.button1);
+//	}
 
-	public AsyncEvents(Activity activity, OutputStream output) {
-		act = activity;
-		out = output;
-		setSendSpeed(act.getResources().getIntArray(R.array.speed_values)[OPT_DEFAULT_ENTRY]);
-		setDisplacement(act.getResources().getIntArray(R.array.displacement_values)[OPT_DEFAULT_ENTRY]);
-		setTune(act.getResources().getIntArray(R.array.tune_values)[OPT_DEFAULT_ENTRY]);
-		enableCalibrationMode(false);
-		hell = new MIDIHellschreiber();
-		hell.gsReset();
-		setIdle(true);
-		tBtn = (ToggleButton)act.findViewById(R.id.toggleButton1);
-		btn = (Button)act.findViewById(R.id.button1);
-		led = null;
-	}
+//	public AsyncEvents(Activity activity, OutputStream output) {
+//		act = activity;
+//		out = output;
+//		setSendSpeed(act.getResources().getIntArray(R.array.speed_values)[OPT_DEFAULT_ENTRY]);
+//		setDisplacement(act.getResources().getIntArray(R.array.displacement_values)[OPT_DEFAULT_ENTRY]);
+//		setTune(act.getResources().getIntArray(R.array.tune_values)[OPT_DEFAULT_ENTRY]);
+//		enableCalibrationMode(false);
+//		hell = new MIDIHellschreiber();
+//		hell.gsReset();
+//		setIdle(true);
+//		tBtn = (ToggleButton)act.findViewById(R.id.toggleButton1);
+////		btn = (Button)act.findViewById(R.id.button1);
+//		led = null;
+//	}
 
-	public AsyncEvents(Activity activity, OutputStream output, OutputStream console, DigitalOutput dout, int pos) {
+	public AsyncEvents(MyHelloIOIOActivity activity, OutputStream output, OutputStream console, DigitalOutput dout, int pos) {
 		act = activity;
 		out = output;
 		scon = console;
-		setSendSpeed(act.getResources().getIntArray(R.array.speed_values)[pos]);
-		setDisplacement(act.getResources().getIntArray(R.array.displacement_values)[pos]);
-		setTune(act.getResources().getIntArray(R.array.tune_values)[pos]);
-		enableCalibrationMode(false);
+		sendSpeed = activity.getResources().getIntArray(R.array.speed_values)[pos];
+		disp = activity.getResources().getIntArray(R.array.displacement_values)[pos];
+		tune = activity.getResources().getIntArray(R.array.tune_values)[pos];
+		if ( activity.isSmallFontEnabled() )
+			fontNumber = FONT5x5;
+		else
+			fontNumber = FONT7x5;
+		
+		isDoubleWidth = activity.isDoubleWidthModeEnabled();	
+		isInCalibrationMode = false;
 		hell = new MIDIHellschreiber();
 		hell.gsReset();
 		setIdle(true);
 		tBtn = (ToggleButton)act.findViewById(R.id.toggleButton1);
-		btn = (Button)act.findViewById(R.id.button1);
+//		btn = (Button)act.findViewById(R.id.button1);
 		led = dout;
 	}
 
-	public void enableCalibrationMode(boolean status) {
-		this.isInCalibrationMode = status;
+	public void enableCalibrationMode(boolean stat) {
+		this.isInCalibrationMode = stat;
 	}
-
-	public boolean isInCalibrationMode() {
-		return isInCalibrationMode;
-	}
-
-	
+//
+//	public boolean isInCalibrationMode() {
+//		return isInCalibrationMode;
+//	}
+//
+//
 	public static void setIdle(boolean isIdle) {
 		AsyncEvents.isIdle = isIdle;
 	}
@@ -100,30 +108,34 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 		return isIdle;
 	}
 
-	public void setSendSpeed(int sendSpeed) {
-		this.sendSpeed = sendSpeed;
-	}
-
-	public int getSendSpeed() {
-		return sendSpeed;
-	}
+//	public void storeActivity(Activity actv) {
+//		this.act = actv;
+//	}
 	
-	public void setDisplacement(int dp) {
-		this.disp = dp;
-	}
-	
-	public int getDisplacement() {
-		return disp;
-	}
-	
-	public void setTune(int val) {
-		this.tune = val;
-	}
-	
-	public int getTune() {
-		return tune;
-	}
-	
+//	public void setSendSpeed(int sendSpeed) {
+//		this.sendSpeed = sendSpeed;
+//	}
+//
+//	public int getSendSpeed() {
+//		return this.sendSpeed;
+//	}
+//	
+//	public void setDisplacement(int dp) {
+//		this.disp = dp;
+//	}
+//	
+//	public int getDisplacement() {
+//		return disp;
+//	}
+//	
+//	public void setTune(int val) {
+//		this.tune = val;
+//	}
+//	
+//	public int getTune() {
+//		return tune;
+//	}
+//	
 	private void serCon(String str) {
 		if ( (scon != null) && (str != null) && (str.length() > 0) )
 			try {
@@ -138,8 +150,8 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 	@Override
 	protected void onPreExecute() {
 		setIdle(false);
-		if ( !isInCalibrationMode() ) {
-			btn.setEnabled(false);
+		if ( !isInCalibrationMode ) {
+//			btn.setEnabled(false);
 			dialog = new ProgressDialog(act);
 			dialog.setTitle(R.string.progress);
 			dialog.setIndeterminate(false);
@@ -171,7 +183,7 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 	protected Void doInBackground(String... arg0) {
 		int len = arg0[0].length();
 		Log.d(TAG, "doInBackground( " + arg0[0] + " )" );
-		if ( !isInCalibrationMode() ) {
+		if ( !isInCalibrationMode ) {
 //		if (isInCalibrationMode)
 //			try {
 //				doCalibrationTask();
@@ -181,6 +193,14 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 //			}
 //		else {
 			Log.d(TAG, "in doInBackground(): send button is pressed.");
+			Log.d(TAG, "Send speed = " + Integer.toString(sendSpeed));
+			Log.d(TAG, "Font number = " + Integer.toString(fontNumber));
+			Log.d(TAG, "Initial tune = " + Integer.toString(tune));
+			Log.d(TAG, "Tone displacement = " + Integer.toString(disp));
+			if (isDoubleWidth)
+				Log.d(TAG, "Double-Width mode was enabled.");
+			else
+				Log.d(TAG, "Double-Width mode was disabled.");
 			if (SERDEBUG)
 				serCon(TAG + " in doInBackground(): send button is pressed.");
 			if (len > 0) {
@@ -232,7 +252,7 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 		}
 		setIdle(true);
 		Log.d(TAG,"Return to Idle.");
-		btn.setEnabled(true);
+//		btn.setEnabled(true);
 	}
 	
 	@Override
@@ -250,7 +270,7 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 		}
 		setIdle(true);
 		Log.d(TAG,"Return to Idle.");
-		btn.setEnabled(true);
+//		btn.setEnabled(true);
 		Log.d(TAG, "OnCancelled");
 	}
 
@@ -300,17 +320,18 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 		}
 		
 		protected void gsReset() {	// for Roland SC-55/55mk2/(88)
-			serOut(0xF0);	// exclusive status
-			serOut(0x41);	// ID (=Roland)
-			serOut(0x10);	// device ID
-			serOut(0x42);	// model ID
-			serOut(0x12);	// command ID (=DT1)
-			serOut(0x40);	// address MSB
-			serOut(0x00);	// address
-			serOut(0x7F);	// address LSB
-			serOut(0x00);	// GS reset
-			serOut(0x41);
-			serOut(0xF7);
+//			serOut(0xF0);	// exclusive status
+//			serOut(0x41);	// ID (=Roland)
+//			serOut(0x10);	// device ID
+//			serOut(0x42);	// model ID
+//			serOut(0x12);	// command ID (=DT1)
+//			serOut(0x40);	// address MSB
+//			serOut(0x00);	// address
+//			serOut(0x7F);	// address LSB
+//			serOut(0x00);	// GS reset
+//			serOut(0x41);
+//			serOut(0xF7);
+			vsendMIDImsg(0xF0, 0x41, 0x10, 0x42, 0x12, 0x40, 0, 0x7F, 0 ,0x41, 0xF7);
 			delay(100);
 		}
 		

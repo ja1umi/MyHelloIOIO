@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+	<resources>
+	    <bool name="SmsGWMode">false</bool>
+	    <bool name="SmallFontMode">false</bool>
+	    <bool name="DoubleWidthMode">false</bool>
+	</resources>
