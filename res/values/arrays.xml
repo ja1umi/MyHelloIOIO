@@ -1,28 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
     <resources>
         <string-array name="speed_entries">
-            <item>Slow</item>
-            <item>Medium</item>
-            <item>Fast</item>
-        </string-array>
+            <item>3s dots</item>
+            <item>10s dots</item>
+            <item>20s dots</item>
+            <item>30s dots</item>
+            <item>60s dots</item>
+            </string-array>
         <integer-array name="speed_values">
-            <item>1</item>
-            <item>2</item>
-            <item>3</item>
-        </integer-array>
+            <item>300</item>
+            <item>1500</item>
+            <item>3000</item>
+            <item>4500</item>
+            <item>9000</item>
+            </integer-array>
         <integer-array name="displacement_values">
-        	<item>2</item>
+        	<item>34</item>
+        	<item>9</item>
         	<item>4</item>
-        	<item>8</item>
-        </integer-array>
+        	<item>2</item>
+        	<item>2</item>
+        	</integer-array>
         <integer-array name="tune_values">
-        	<item>1500</item>
-        	<item>1450</item>
-        	<item>1400</item>
-        </integer-array>
+        	<item>922</item>
+        	<item>998</item>
+        	<item>1012</item>
+        	<item>1018</item>
+        	<item>1020</item>
+        	</integer-array>
         <string-array name="setting_items">
-            <item >Enable SMS GW</item>
+            <item >Enable SMS Gatewaying</item>
             <item >Use smaller font</item>
-            <item >Use double-width character</item>
+            <item >Enable double-width print (double column) mode</item>
+            <item >Enable Full break-in</item>
         </string-array>
     </resources>

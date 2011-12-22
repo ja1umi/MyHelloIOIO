@@ -1,25 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="10dip">
-    <TextView android:layout_width="wrap_content" android:textSize="20sp" android:layout_marginBottom="10dip" android:layout_gravity="center" android:text="@string/msg" android:layout_height="wrap_content"></TextView>
-    <ToggleButton android:text="@string/toggleButton_testTone" android:layout_width="match_parent" android:layout_gravity="center" android:id="@+id/toggleButton1" android:layout_height="wrap_content"></ToggleButton>
-<Spinner android:layout_width="match_parent" android:id="@+id/spinner1" android:layout_height="wrap_content"> </Spinner>
-<EditText android:layout_height="wrap_content" android:id="@+id/editText1" android:layout_width="match_parent">
-    <requestFocus></requestFocus>
-</EditText>
-<Button android:id="@+id/button1" android:text="@string/button_send" android:layout_height="wrap_content" android:layout_width="match_parent" android:layout_gravity="center_horizontal"></Button>
-<Button android:id="@+id/button3" android:text="@string/button_about" android:layout_height="wrap_content" android:layout_width="match_parent"></Button>
+    android:orientation="vertical"
+    android:paddingTop="10sp" >
 
-<Button
-    android:id="@+id/button4"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="@string/button_settings" />
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/msg_1"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-<Button android:id="@+id/button2" android:layout_width="match_parent" android:text="@string/button_quit" android:layout_gravity="center_horizontal" android:layout_height="wrap_content"></Button>
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
 
-<!--  <CheckBox android:text="GW" android:id="@+id/checkBox1" android:layout_width="wrap_content" android:layout_height="wrap_content"></CheckBox> -->
+        <requestFocus />
+    </EditText>
+
+
+
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.74"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp" >
+
+
+
+
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="198dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="32dp"
+            android:text="@string/button_send"
+            android:textStyle="bold" />
+
+        <ToggleButton
+            android:id="@+id/toggleButton1"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignTop="@+id/button1"
+            android:text="Test Tone" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/toggleButton1"
+            android:layout_alignParentLeft="true"
+            android:text="@string/msg_2"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <Button
+            android:id="@+id/button4"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:text="@string/button_settings" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/button4"
+            android:layout_marginTop="33dp"
+            android:text="@string/button_about" />
+
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/button3"
+            android:layout_alignBottom="@+id/button3"
+            android:layout_alignParentRight="true"
+            android:text="@string/button_quit" />
+
+        <Spinner
+            android:id="@+id/spinner1"
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/button4"
+            android:layout_alignBottom="@+id/button4"
+            android:layout_toRightOf="@+id/button4" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/spinner1"
+            android:layout_alignParentLeft="true"
+            android:text="@string/msg_3"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </RelativeLayout>
+
 </LinearLayout>

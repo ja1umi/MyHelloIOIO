@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">MyHelloIOIO</string>
-    <string name="msg">Tone Generation</string>
-    <string name="settings_label">Settings...</string>
-    <string name="settings_title">MyIOIO settings</string>
-    <string name="settings_shortcut">s</string>
-    <string name="gw_title">SMS Gatewaying</string>
-    <string name="gw_summary">Enable SMS gatewaying</string>
-    <string name="speed_title">Speed</string>
-    <string name="speed_summary">Select transmitting speed</string>
-    <string name="speed_dialogtitle">Transmitting speed</string>
+    <string name="msg_1">Enter message to send</string>
+    <string name="msg_2">Test Tone</string>
+    <string name="msg_3">Configure settings and send-speed</string>
+    <string name="msg_4">Configure settings</string>    
+    <!-- <string name="settings_label">Settings...</string> -->
+    <!-- <string name="settings_title">MyIOIO settings</string> -->
+    <!-- <string name="settings_shortcut">s</string> -->
+    <!-- <string name="gw_title">SMS Gatewaying</string> -->
+    <!-- <string name="gw_summary">Enable SMS gatewaying</string> -->
+    <!-- <string name="speed_title">Speed</string> -->
+    <!-- <string name="speed_summary">Select transmitting speed</string> -->
+    <!-- <string name="speed_dialogtitle">Transmitting speed</string> -->
     <string name="about_label">About</string>
-    <string name="about_title">About MyHelloIOIO</string>
+    <!-- <string name="about_title">About MyHelloIOIO</string> -->
     <string name="about_text">\
 MyHelloIOIO is a program that is used to learn how to use <b>IOIO board</b> and 
     how to write an Android application.

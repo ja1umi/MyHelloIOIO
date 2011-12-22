@@ -49,14 +49,14 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 //	private boolean ioioInitialized;
 	private String hellMessage;
 //	private String sendSpeedTag;
-	private boolean smsGWMode, smallFontMode, doubleWidthMode;
+	private boolean smsGWMode, smallFontMode, doubleWidthMode, fullBreakInMode;
 //	private boolean[] defaultSettings;
 	private int itemAtPos = OPT_DEFAULT_ENTRY;
 	private ToggleButton toggleButton;
 	private Button sendButton, exitButton, aboutButton, settingButton;
 	private AsyncEvents async;
 	private OutputStream out, scon;
-	private DigitalOutput led;
+	private DigitalOutput led, rts;
 	private Uart uart1, uart2;
 //	private List<String> msgList = Collections.synchronizedList( new ArrayList<String>() );
 	private EditText editText;
@@ -80,6 +80,7 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 		enableSmsGWMode(getResources().getBoolean(R.bool.SmsGWMode));
 		enableSmallFontMode(getResources().getBoolean(R.bool.SmallFontMode));
 		enableDoubleWidthMode(getResources().getBoolean(R.bool.DoubleWidthMode));
+		enableFullBreakInMode(getResources().getBoolean(R.bool.FullBreakInMode));
 
         setContentView(R.layout.main);
         toggleButton = (ToggleButton) findViewById(R.id.toggleButton1);
@@ -140,6 +141,14 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 		return doubleWidthMode;
 	}
 	
+	public void enableFullBreakInMode(boolean stat) {
+		this.fullBreakInMode = stat;
+	}
+	
+	public boolean isFullBrealInModeEnabled() {
+		return fullBreakInMode;
+	}
+	
 	public void setItemAtPos(int val) {
 		this.itemAtPos = val;
 	}
@@ -154,7 +163,7 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 				case R.id.toggleButton1:
 					Log.d(TAG, "ToggleButton was clicked");
 //					async = new AsyncEvents(MyHelloIOIOActivity.this, out, OPT_SPD_SLOW_VAL, true);
-					async = new AsyncEvents(MyHelloIOIOActivity.this, out, scon, led, getItemAtPos());
+					async = new AsyncEvents(MyHelloIOIOActivity.this, out, scon, led, rts, getItemAtPos());
 					if ( AsyncEvents.isIdle() ) {
 						Log.d(TAG, "AsyncEvents WAS in idle status.");
 						async.enableCalibrationMode(true);
@@ -164,7 +173,7 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 					break;
 				case R.id.button1:
 					Log.d(TAG, "Button (SEND) was clicked");
-					async = new AsyncEvents(MyHelloIOIOActivity.this, out, scon, led, getItemAtPos());
+					async = new AsyncEvents(MyHelloIOIOActivity.this, out, scon, led, rts, getItemAtPos());
 					hellMessage = editText.getText().toString();
 					enableUi(false);
 					if ( AsyncEvents.isIdle() ) {
@@ -209,6 +218,10 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 						uart1.close();
 					if (uart2 != null)
 						uart2.close();
+					if (led != null)
+						led.close();
+					if (rts != null)
+						rts.close();
 					finish();
 					break;
 			} // end of switch
@@ -217,10 +230,11 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 	
 	private void showSettingDialog() {
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-		final boolean[] settings = new boolean[3];
+		final boolean[] settings = new boolean[4];
 		settings[0] = isSmsGWEnabled();
 		settings[1] = isSmallFontEnabled();
-		settings[2] = isDoubleWidthModeEnabled();		
+		settings[2] = isDoubleWidthModeEnabled();
+		settings[3] = isFullBrealInModeEnabled();
 		
 		alertDialogBuilder.setTitle(R.string.setting_title);
 		alertDialogBuilder.setMultiChoiceItems(R.array.setting_items, settings,
@@ -255,6 +269,15 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 									Log.d(TAG, "Double-Width mode is now disabled.");									
 								}
 								break;
+							case 3:
+								if (isChecked) {
+									enableFullBreakInMode(true);
+									Log.d(TAG, "Full-break-in mode is now enabled.");
+								} else {
+									enableFullBreakInMode(false);
+									Log.d(TAG, "Full-break-in mode is now disabled.");									
+								}
+								break;
 							default:
 								break;
 						}
@@ -278,6 +301,7 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
                     	enableSmsGWMode(settings[0]);
                     	enableSmallFontMode(settings[1]);
                     	enableDoubleWidthMode(settings[2]);
+                    	enableFullBreakInMode(settings[3]);
                     	Log.d(TAG, "Settings were reverted to previous values.");
                     }
                 }
@@ -332,6 +356,7 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
     	private static final int PIN_TX = 14;
 //    	private static final int PIN_SERCON_RX = 40;
     	private static final int PIN_SERCON_TX = 39;
+    	private static final int PIN_RTS = 15;
 //    	private Uart uart_;
   
     	@Override
@@ -342,7 +367,8 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
     		scon = uart2.getOutputStream();
     		serCon("UART modules were successfully configured.");
     		// NOTE: The on-board LED is wired so that LOW (false) turns it on and HIGH (true) turns it off.
-    		led = ioio_.openDigitalOutput(IOIO.LED_PIN, true);
+    		led = ioio_.openDigitalOutput(IOIO.LED_PIN, true);		// on-board LED
+    		rts = ioio_.openDigitalOutput(PIN_RTS, true);
     		serCon("DigitalOutput module was successfully configured.");
     		serCon("IOIO board initialization has completed.");
     		enableUi(true);
@@ -361,7 +387,7 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
     			if (SMSReceiver.isSMSReceived() && AsyncEvents.isIdle() ) {
     				hellMessage = SMSReceiver.getSMSMsg();
 //    				sendHELLMessage();
-    				async = new AsyncEvents(MyHelloIOIOActivity.this, out, scon, led, getItemAtPos());
+    				async = new AsyncEvents(MyHelloIOIOActivity.this, out, scon, led, rts, getItemAtPos());
 //    				async.setSendSpeed(getResources().getIntArray(R.array.speed_values)[getItemAtPos()]);
 //    				Log.d(TAG, "SendSpeed = " + Integer.toString(async.getSendSpeed()));
 //   				serCon(TAG + ": SendSpeed = " + Integer.toString(async.getSendSpeed()));

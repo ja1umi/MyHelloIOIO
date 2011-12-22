@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">Hello World, LayoutTestActivity!</string>
+    <string name="app_name">LayoutTest</string>
+    <string name="msg_1">メッセージ</string>
+    <string name="msg_2">試験信号</string>
+    <string name="msg_3">送信モードと速度のカスタマイズ</string>
+    <string name="button_send">送信</string>
+    <string name="button_about">このアプリについて</string>
+    <string name="button_settings">設定開始</string>
+    <string name="button_quit">終了</string>
+
+</resources>

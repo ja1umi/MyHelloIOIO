@@ -3,4 +3,5 @@
 	    <bool name="SmsGWMode">false</bool>
 	    <bool name="SmallFontMode">false</bool>
 	    <bool name="DoubleWidthMode">false</bool>
+	    <bool name="FullBreakInMode">false</bool>
 	</resources>
