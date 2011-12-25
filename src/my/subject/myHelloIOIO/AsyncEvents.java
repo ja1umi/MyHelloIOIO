@@ -363,10 +363,10 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 		}
 		
 		protected void displayDots(int fontSel, char ch, int curPos) {
-			int csum, dat, b = 0, b1 = 0x10, b2 = 0, b3 = 0;
+			int csum, dat, b, b1 = 0x10, b2 = 0x01, b3 = 0;
 			
 			vsendMIDImsg(0xF0, 0x41, 0x10, 0x45, 0x12, b1, b2, b3);
-			dat = 0;
+			dat = 0; b = 0;
 			for (int i = 1; i <=64; i++) {
 				if ( i < 8 )
 					b =  getRowCharPattern(fontSel, ch)[i-1];
@@ -388,6 +388,7 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 				if (pixelStat == 0) {
 					GPIOWrite(rts, true);		// turn transmitter off while "white" pixels appear
 					GPIOWrite(led, true);
+					delay(50);					// wait for the transmitter to stabilize
 					Log.d(TAG, "White pixel, turn transmitter off.");
 				} else {
 					GPIOWrite(rts, false);		// turn transmitter on only when needed				

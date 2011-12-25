@@ -190,7 +190,8 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 //						Log.d(TAG, "SendSpeed = " + Integer.toString(async.getSendSpeed()));
 						if ( hellMessage.length() > 0 )
 							async.execute(hellMessage);
-						hellMessage = "";
+//						hellMessage = "";
+						editText.setText("");
 					}
 					enableUi(true);
 					break;
@@ -395,7 +396,7 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
     				serCon(TAG + ": hell msg = " + hellMessage);
     				if ( hellMessage.length() > 0 )
     					async.execute(hellMessage);
-    				hellMessage = "";
+//    				hellMessage = "";
     				SMSReceiver.setSMSMsg("");
     				SMSReceiver.setSMSReceived(false);
 //        			Log.d(TAG, "SMS message has been sent.");			
