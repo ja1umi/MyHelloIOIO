@@ -29,12 +29,12 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 	public final int FONT5x5 = 0;
 	public final int FONT7x5 = 1;
 	
-	private DigitalOutput led, rts;
-	private OutputStream out;
-	private OutputStream scon;
-	private ToggleButton tBtn;
+	private static DigitalOutput led, rts;
+	private static OutputStream out;
+	private static OutputStream scon;
+	private static ToggleButton tBtn;
 //	private Button btn;
-	private int fontNumber, sendSpeed, disp, tune;
+	private static int fontNumber, sendSpeed, disp, tune;
 	private boolean isInCalibrationMode, isDoubleWidth, isFullBreakIn;
 	private GSMIDIHellschreiber sc55;
 	private static boolean isIdle;
@@ -42,6 +42,10 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 //	Context context;
 	private Activity act = null;
 	private ProgressDialog dialog = null;
+	
+	public AsyncEvents() {
+		
+	}
 	
 	public AsyncEvents(MyHelloIOIOActivity activity, OutputStream output, OutputStream console, DigitalOutput dout1, DigitalOutput dout2, int pos) {
 		act = activity;
@@ -185,8 +189,9 @@ public class AsyncEvents extends AsyncTask<String, Integer, Void> implements OnC
 				serCon(TAG + " in doInBackground(): send button is pressed.");
 			GPIOWrite(rts, false); GPIOWrite(led, false); sc55.delay(100);		// assert RTS (turn transmitter on)
 			if (len > 0) {
-				sc55.setUserStr(arg0[0]);
+//				sc55.setUserStr(arg0[0]);
 				for (int i = 0; i < len; i++) {
+					sc55.setUserStr(arg0[0].substring(i));
 //					hell.doHellSchreiber(arg0[0].charAt(i));
 					sc55.sendCharacter(fontNumber, arg0[0].charAt(i), tune, disp, sendSpeed, isDoubleWidth);
 					int pg = (100 * (i + 1)) / len;

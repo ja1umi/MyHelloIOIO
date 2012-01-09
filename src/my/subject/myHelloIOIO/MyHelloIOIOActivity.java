@@ -11,6 +11,7 @@ import ioio.lib.api.Uart;
 import ioio.lib.api.exception.ConnectionLostException;
 import ioio.lib.util.AbstractIOIOActivity;
 import android.app.AlertDialog;
+//import android.content.Context;
 import android.content.DialogInterface;
 //import android.content.res.TypedArray;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import android.widget.Button;
 //import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+//import android.widget.Toast;
 import android.widget.ToggleButton;
 //import android.content.Intent;
 //import android.content.SharedPreferences;
@@ -44,7 +46,7 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
 //	private static final int OPT_SPD_FAST_VAL = 1;
 //	private static final int OPT_SPD_MEDIUM_VAL = 2;
 //	private static final int OPT_SPD_SLOW_VAL = 3;
-	private static final int OPT_DEFAULT_ENTRY = 1;
+	private static final int OPT_DEFAULT_ENTRY = 0;
 	
 //	private boolean ioioInitialized;
 	private String hellMessage;
@@ -379,9 +381,17 @@ public class MyHelloIOIOActivity extends AbstractIOIOActivity implements OnClick
     	@Override
     	protected void loop() throws ConnectionLostException {
     		
-    		if ( SMSReceiver.isSMSReceived() )
+//			if (led != null) {
+//				led.write(false);
+//			}
+
+//  		if ( SMSReceiver.isSMSReceived() ) {
 //    			Log.d(TAG, "SMS msg was delivered.");
-				serCon(TAG + ": SMS msg was delivered.");
+//				serCon(TAG + ": SMS msg was delivered.");
+//				Toast.makeText(MyHelloIOIOActivity.this, "SMS: " + str, Toast.LENGTH_SHORT).show();
+//				if (led != null)
+//					led.write(false);
+ //   		}
     		
     		if ( isSmsGWEnabled() ) {
 //    			Log.d(TAG, "SMSGW enabled.");			

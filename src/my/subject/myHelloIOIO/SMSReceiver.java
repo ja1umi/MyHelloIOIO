@@ -11,7 +11,7 @@ import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
 //import android.util.Log;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 public class SMSReceiver extends BroadcastReceiver {
 	private static boolean smsReceived;
@@ -33,13 +33,13 @@ public class SMSReceiver extends BroadcastReceiver {
 			smsManager.sendTextMessage(smsMessage[i].getOriginatingAddress().toString(), null, "#Received " + sdf.format(date) + "#", null, null);
 		}
 ////		Log.d("SMS", str);
-		Toast.makeText(context, "SMS: " + str, Toast.LENGTH_SHORT).show();
-//		SharedPreferences pref = context.getSharedPreferences("pref", Context.MODE_PRIVATE);	// Importing Context won't give me all it's constants (e.g. MODE_PRIVATE) and methods!
+		//Toast.makeText(context, "SMS: " + str, Toast.LENGTH_SHORT).show();
+//		SharedPreferences pref = context.getSharedPreferences("pref", Context.MODE_WORLD_READABLE | Context.MODE_WORLD_WRITEABLE);	// Importing Context won't give me all it's constants (e.g. MODE_PRIVATE) and methods!
 //		SharedPreferences.Editor e = pref.edit();
 //		e.putString("SMSMsg", pref.getString("SMSMsg", "") + str);
 ////		e.putBoolean("IsSMSReceived", true);
 		SMSReceiver.smsMsg += str;
-		setSMSReceived(true);
+		setSMSReceived(true); 
 	}
 
 	public static void setSMSReceived(boolean smsReceived) {

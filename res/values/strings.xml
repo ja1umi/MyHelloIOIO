@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MyHelloIOIO</string>
+    <string name="app_name">IOIOHell</string>
     <string name="msg_1">Enter message to send</string>
     <string name="msg_2">Test Tone</string>
     <string name="msg_3">Configure settings and send-speed</string>
@@ -16,8 +16,7 @@
     <string name="about_label">About</string>
     <!-- <string name="about_title">About MyHelloIOIO</string> -->
     <string name="about_text">\
-MyHelloIOIO is a program that is used to learn how to use <b>IOIO board</b> and 
-    how to write an Android application.
+This program generates slow Sequential Multi-Tone Hellschreiber (<b>S/MT Hell</b>) tones corresponding to a predefined message via <b>IOIO for Android board</b>. Written by JA1UMI as Kasumi YOSHINO. 
     </string>
     <string name="progress">Processing...</string>
     <string name="et1_hint">Message to be sent</string>

@@ -2,7 +2,6 @@
 <resources>
 
     <string name="hello">Hello World, LayoutTestActivity!</string>
-    <string name="app_name">LayoutTest</string>
     <string name="msg_1">メッセージ</string>
     <string name="msg_2">試験信号</string>
     <string name="msg_3">送信モードと速度のカスタマイズ</string>
